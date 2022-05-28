@@ -37,6 +37,8 @@ Public Module CoreModule
          Dim TargetFile As String = Nothing
          Dim TargetDirectory As String = Path.Combine(Path.GetDirectoryName(SourceFile), $"{Path.GetFileNameWithoutExtension(SourceFile)}_DATA")
 
+         If GetCommandLineArgs.Count < 2 Then Throw New Exception("Specify an input file.")
+
          Do
             FileName = GetString(Data, Offset, 12, AdvanceOffset:=True)
             If FileName.Contains(PADDING) Then FileName = FileName.Substring(0, FileName.IndexOf(PADDING))
@@ -64,7 +66,7 @@ Public Module CoreModule
                TargetFile = Path.Combine(TargetDirectory, .FileName)
                Console.WriteLine(TargetFile)
                NextOffset = If(Index >= Files.Count - 1, Data.Count, Files(Index + 1).Offset)
-               If NextOffset >= Data.Count Then
+               If NextOffset > Data.Count Then
                   Throw New Exception("The offset cannot be beyond the end of the data file.")
                ElseIf NextOffset < .Offset Then
                   Throw New Exception("The offset of the next file cannot be less than the current file's offset.")
