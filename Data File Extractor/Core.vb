@@ -20,7 +20,7 @@ Public Module CoreModule
    End Structure
 
    Private ReadOnly BYTES_TO_TEXT As Func(Of List(Of Byte), String) = Function(Bytes As List(Of Byte)) New String((From ByteO In Bytes Select ToChar(ByteO)).ToArray())   'This procedure converts the specified bytes to text.
-   Private ReadOnly INVALID_CHARACTERS() As Char = {"*"c, "/"c, "<"c, ">"c, "?"c, "["c, "\"c, "]"c, "|"c, " "c}                                                           'Defines invalid characters that are invalid in file names in MS-DOS.
+   Private ReadOnly INVALID_CHARACTERS() As Char = {"*"c, "/"c, "<"c, ">"c, "?"c, "["c, "\"c, "]"c, "|"c, " "c}                                                           'Defines characters that are invalid in file names in MS-DOS.
    Private ReadOnly PADDING As Char = ToChar(&H0%)                                                                                                                        'Defines the character used to pad file names.
 
    'This procedure is executed when this program is started.
@@ -97,7 +97,7 @@ Public Module CoreModule
    'This procedure returns a string of the length specified in bytes at the specified position.
    Private Function GetString(Data As List(Of Byte), ByRef Offset As Integer, Count As Integer, Optional AdvanceOffset As Boolean = False) As String
       Try
-         Return BYTES_TO_TEXT(GetBytes(Data, Offset, Count, AdvanceOffset))
+         Return BYTES_TO_TEXT(GetBytes(Data, Offset, Count))
       Catch ExceptionO As Exception
          HandleError(ExceptionO)
       End Try
