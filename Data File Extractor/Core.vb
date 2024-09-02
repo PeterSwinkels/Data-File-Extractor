@@ -23,6 +23,16 @@ Public Module CoreModule
    Private ReadOnly INVALID_CHARACTERS() As Char = {"*"c, "/"c, "<"c, ">"c, "?"c, "["c, "\"c, "]"c, "|"c, " "c}                                                           'Defines characters that are invalid in file names in MS-DOS.
    Private ReadOnly PADDING As Char = ToChar(&H0%)                                                                                                                        'Defines the character used to pad file names.
 
+   'This procedure displays any errors that occur.
+   Private Sub DisplayError(ExceptionO As Exception)
+      Try
+         Console.Error.WriteLine($"ERROR: {ExceptionO.Message}")
+         [Exit](0)
+      Catch
+         [Exit](0)
+      End Try
+   End Sub
+
    'This procedure is executed when this program is started.
    Public Sub Main()
       Try
@@ -75,7 +85,7 @@ Public Module CoreModule
             End With
          Next Index
       Catch ExceptionO As Exception
-         HandleError(ExceptionO)
+         DisplayError(ExceptionO)
       End Try
    End Sub
 
@@ -88,7 +98,7 @@ Public Module CoreModule
 
          Return Bytes
       Catch ExceptionO As Exception
-         HandleError(ExceptionO)
+         DisplayError(ExceptionO)
       End Try
 
       Return Nothing
@@ -99,19 +109,9 @@ Public Module CoreModule
       Try
          Return BYTES_TO_TEXT(GetBytes(Data, Offset, Count))
       Catch ExceptionO As Exception
-         HandleError(ExceptionO)
+         DisplayError(ExceptionO)
       End Try
 
       Return Nothing
    End Function
-
-   'This procedure handles any errors that occur.
-   Private Sub HandleError(ExceptionO As Exception)
-      Try
-         Console.WriteLine($"ERROR: {ExceptionO.Message}")
-         [Exit](0)
-      Catch
-         [Exit](0)
-      End Try
-   End Sub
 End Module
