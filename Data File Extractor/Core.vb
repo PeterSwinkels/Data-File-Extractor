@@ -33,20 +33,21 @@ Public Module CoreModule
          Dim FileOffset As New Integer
          Dim Files As New List(Of FileStr)
          Dim NextOffset As New Integer
-         Dim Offset As Integer = 0
+         Dim Offset As Integer = &H0%
          Dim TargetFile As String = Nothing
          Dim TargetDirectory As String = Path.Combine(Path.GetDirectoryName(SourceFile), $"{Path.GetFileNameWithoutExtension(SourceFile)}_DATA")
 
          If GetCommandLineArgs.Count < 2 Then Throw New Exception("Specify an input file.")
 
          Do
-            FileName = GetString(Data, Offset, 12, AdvanceOffset:=True)
+            FileName = GetString(Data, Offset, Count:=&HC%, AdvanceOffset:=True)
+
             If FileName.Contains(PADDING) Then FileName = FileName.Substring(0, FileName.IndexOf(PADDING))
             If FileName.Intersect(INVALID_CHARACTERS).Count > 0 Then
                Throw New Exception("Invalid characters found in filename.")
             End If
 
-            FileOffset = BitConverter.ToInt32(GetBytes(Data, Offset, &H4%, AdvanceOffset:=True).ToArray(), 0)
+            FileOffset = BitConverter.ToInt32(GetBytes(Data, Offset, Count:=&H4%, AdvanceOffset:=True).ToArray(), 0)
 
             If EndOfFileList Is Nothing Then
                EndOfFileList = FileOffset
@@ -107,7 +108,7 @@ Public Module CoreModule
    'This procedure returns a string of the length specified in bytes at the specified position.
    Private Function GetString(Data As List(Of Byte), ByRef Offset As Integer, Count As Integer, Optional AdvanceOffset As Boolean = False) As String
       Try
-         Return BYTES_TO_TEXT(GetBytes(Data, Offset, Count))
+         Return BYTES_TO_TEXT(GetBytes(Data, Offset, Count, AdvanceOffset))
       Catch ExceptionO As Exception
          DisplayError(ExceptionO)
       End Try

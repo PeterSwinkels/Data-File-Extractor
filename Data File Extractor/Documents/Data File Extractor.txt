@@ -1,0 +1,4 @@
+Data File Extractor is a program for extracting a program's data files.
+
+Supported data files:
+-Simcity 2000 for MS-DOS - by: Maxixs, 1993
